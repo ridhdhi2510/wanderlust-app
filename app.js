@@ -24,6 +24,14 @@ const userRouter = require("./routes/user.js");
 
 const dbUrl = process.env.ATLASDB_URL;
 
+app.set("view engine" , "ejs")
+app.set("views" , path.join(__dirname, "views"));
+app.use(express.urlencoded({extended :true}));
+app.use(methodoverride("_method"))
+app.engine('ejs', ejsMate);
+app.use(express.static(path.join(__dirname , "public")));
+app.set('view cache', false);
+
 main().then(() =>{
      console.log("connected to DB");
 }).catch((err) =>{
@@ -39,14 +47,6 @@ async function main(){
           tlsInsecure: false,
      });
 }
-
-app.set("view engine" , "ejs")
-app.set("views" , path.join(__dirname, "views"));
-app.use(express.urlencoded({extended :true}));
-app.use(methodoverride("_method"))
-app.engine('ejs', ejsMate);
-app.use(express.static(path.join(__dirname , "public")));
-app.set('view cache', false);
 
 const store = MongoStore.create({
      mongoUrl:dbUrl,
